@@ -29,7 +29,7 @@ pip install Flask reportlab xhtml2pdf
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/your-username/curriculum-generator.git
+   git clone https://github.com/Estevao-lang/gerador-historia.git
    ```
 
 2. Navegue até o diretório do projeto:
