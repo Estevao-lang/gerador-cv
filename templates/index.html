@@ -115,7 +115,7 @@
 								<h6>Crie o seu currículo aqui!</h6>
 								<p>Em poucos passos você poderá criar e compartilhar o seu curriculo de forma gratuita
 								</p>
-								<form action="/generate-pdf" method="post" class="mb-0">
+								<form action="/generate-pdf" method="post" class="mb-0" id="curriculumForm">
 									<!-- Botão para acessar a visualização em tempo real do PDF -->
 									
 									<div class="step " id="step1">
@@ -424,7 +424,7 @@
 
 										<div class="button-container">
 											<button type="button" onclick="previousStep('step2')" class="btn btn-secondary">Voltar</button>
-											<button type="submit" onclick="openModal()" class="btn btn-primary" id="avancar">Avançar</button>
+											<button type="submit" class="btn btn-primary" id="avancar">Avançar</button>
 										</div>
 										
 										<!-- Modal -->
@@ -433,7 +433,8 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<img class='modal-img' src="..\static\images\logo\logo-dark-trampo.png" >
-														<button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+													
+
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
@@ -451,57 +452,60 @@
 										<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 										<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 										<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-										
 										<script>
 											function openModal() {
 												$('#successModal').modal('show');
 											}
 										</script>
 										<script>
-											function validateForm() {
-												var nome = document.querySelector('input[name="nome"]').value.trim();
-												var email = document.querySelector('input[name="email"]').value.trim();
-												var telefone = document.querySelector('input[name="telefone"]').value.trim();
-												var linkedin = document.querySelector('input[name="linkedin"]').value.trim();
-												var cep = document.querySelector('input[name="cep"]').value.trim();
-												var bairro = document.querySelector('input[name="bairro"]').value.trim();
-												var cidade = document.querySelector('input[name="cidade"]').value.trim();
-												var estado = document.querySelector('input[name="estado"]').value.trim();
-												var perfil = document.querySelector('textarea[name="perfil"]').value.trim();
+										function validateForm() {
+											var nome = document.querySelector('input[name="nome"]').value.trim();
+											var email = document.querySelector('input[name="email"]').value.trim();
+											var telefone = document.querySelector('input[name="telefone"]').value.trim();
+											var linkedin = document.querySelector('input[name="linkedin"]').value.trim();
+											var cep = document.querySelector('input[name="cep"]').value.trim();
+											var bairro = document.querySelector('input[name="bairro"]').value.trim();
+											var cidade = document.querySelector('input[name="cidade"]').value.trim();
+											var estado = document.querySelector('input[name="estado"]').value.trim();
+											var perfil = document.querySelector('textarea[name="perfil"]').value.trim();
 										
-												// Validar campos obrigatórios
-												if (!nome || !email || !telefone || !linkedin || !cep || !bairro || !cidade || !estado || !perfil) {
-													alert('Preencha todos os campos obrigatórios.');
-													return false;
-												}
-										
-												// Validar formato do e-mail
-												var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-												if (!emailRegex.test(email)) {
-													alert('Digite um endereço de e-mail válido.');
-													return false;
-												}
-										
-												// Validar formato do telefone (apenas números)
-												var telefoneRegex = /^\d+$/;
-												if (!telefoneRegex.test(telefone)) {
-													alert('Digite um número de telefone válido.');
-													return false;
-												}
-										
-												// Outras verificações conforme necessário
-										
-												// Se a validação for bem-sucedida, acione a submissão
-												submitForm();
-										
-												// Retorne false para evitar a submissão padrão do formulário
+											// Validar campos obrigatórios
+											if (!nome || !email || !telefone || !linkedin || !cep || !bairro || !cidade || !estado || !perfil) {
+												alert('Preencha todos os campos obrigatórios.');
 												return false;
 											}
 										
-											function submitForm() {
-												document.querySelector('form').submit();
+											// Validar formato do e-mail
+											var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+											if (!emailRegex.test(email)) {
+												alert('Digite um endereço de e-mail válido.');
+												return false;
 											}
-										</script>
+										
+											// Validar formato do telefone (apenas números)
+											var telefoneRegex = /^[0-9 ()+-]+$/;
+											if (!telefoneRegex.test(telefone)) {
+												alert('Digite um número de telefone válido.');
+												return false;
+											}
+										
+											return true;
+										}
+										
+										function openModal() {
+											$('#successModal').modal('show');
+										}
+										
+										document.getElementById('curriculumForm').addEventListener('submit', function (event) {
+											event.preventDefault(); // Evita a submissão padrão do formulário
+										
+											if (validateForm()) {
+												// Se a validação for bem-sucedida, acione a submissão
+												document.getElementById('curriculumForm').submit();
+												openModal();  // Abre o modal após a submissão bem-sucedida
+											}
+										});
+									</script>
 								</form>
 							</div>
 						</div>

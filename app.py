@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, make_response, session
 from io import BytesIO
 from xhtml2pdf import pisa
+from datetime import datetime
 import platform
 
 # Verifica se o sistema é Windows
@@ -45,14 +46,16 @@ def index():
 
 @app.route('/generate-pdf', methods=['POST'])
 def generate_pdf():
+    # ...
+
     user_data = {
         'nome': request.form.get('nome', ''),
         'dataNascimento': request.form.get('dataNascimento', ''),
         'email': request.form.get('email', ''),
         'linkedin': request.form.get('linkedin', ''),
         'perfil': request.form.get('perfil', ''),
-        'telefone': request.form.get('telefone', ''),
-        'cep': request.form.get('cep', ''),
+        'telefone': ''.join(c for c in request.form.get('telefone', '') if c.isdigit()),
+        'cep': ''.join(c for c in request.form.get('cep', '') if c.isdigit()),
         'bairro': request.form.get('bairro', ''),
         'cidade': request.form.get('cidade', ''),
         'estado': request.form.get('estado', ''),
@@ -65,6 +68,14 @@ def generate_pdf():
         'curso': request.form.get('curso', ''),
         'habilidades': [habilidade for habilidade in habilidades if habilidade in request.form]
     }
+
+    # Tratamento da data de nascimento
+    data_nascimento_str = user_data['dataNascimento']
+    try:
+        user_data['dataNascimento'] = datetime.strptime(data_nascimento_str, '%Y-%m-%d')
+    except ValueError:
+        # Tratar erro de formato de data inválido
+        user_data['dataNascimento'] = None  # Ou defina um valor padrão
 
     validation_error = validate_form_data(user_data)
     if validation_error:
@@ -79,6 +90,5 @@ def generate_pdf():
     response.headers['Content-Type'] = 'application/pdf'
 
     return response
-
 if __name__ == '__main__':
     app.run(debug=True)
